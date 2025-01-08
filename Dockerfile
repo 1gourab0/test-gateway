@@ -1,38 +1,19 @@
-# Development stage
-FROM python:alpine AS development
+# Dockerfile
 
-WORKDIR /python-docker
+# Use an official Python runtime as a parent image
+FROM python:3.9-slim
 
-# Copy the requirements file and install dependencies
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+# Set the working directory in the container
+WORKDIR /app
 
-# Copy the application code
-COPY . .
-RUN ls
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-# Run tests
-CMD ["python3", "test_app.py", "-v"]
+# Install the dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Production stage
-FROM python:alpine AS production
+# Expose the port FastAPI will run on
+EXPOSE 8000
 
-WORKDIR /python-docker
-
-# Copy only the necessary files for production
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
-
-COPY . .
-
-# Create a new user with UID 10016
-RUN addgroup -g 10016 choreo && \
-    adduser  --disabled-password  --no-create-home --uid 10016 --ingroup choreo choreouser
-
-# Switch to the new user
-USER 10016
-
-EXPOSE 5000
-
-# Start the Flask application
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Set the command to run the application using Uvicorn
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
