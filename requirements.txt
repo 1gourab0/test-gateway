@@ -1,3 +1,1 @@
-fastapi
-uvicorn
-httpx
+Flask>=2.0.2
