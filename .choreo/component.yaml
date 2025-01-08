@@ -1,9 +1,9 @@
 schemaVersion: "1.1"
 endpoints:
-    - name: books_rest_endpoint
-      displayName: Books REST Endpoint
+    - name: compute-service-api
+      displayName: API-Gateway-Test
       service:
-        basePath: /reading-list
+        basePath: /
         port: 8000
       type: REST
       networkVisibilities:
